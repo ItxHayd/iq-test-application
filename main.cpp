@@ -6,12 +6,14 @@
 #include <cstdlib> // for random
 #include <ctime> // seeding random
 #include <cctype> // for toupper
+#include <chrono> // for timer
 using namespace std;
 
 int main(){
     int score = 0;
     srand(time(0));
     string contestent;
+    int timeLimit = 10; 
 
     cout<<"Enter contestent name: ";
     getline(cin,contestent);
@@ -25,6 +27,9 @@ int main(){
     
     int chances = 3;
     while (chances > 0 ){
+       auto startTime =          chrono::steady_clock::now();
+      
+
         //LOOP 
         char answer;
         int index = rand()%3;
@@ -51,25 +56,22 @@ int main(){
 
         cout<<"Enter Your Answer : ";
         cin>>answer;
+        auto endTime = chrono::steady_clock::now();
+int timeTaken = chrono::duration_cast<chrono::seconds>(endTime - startTime).count();
 
-        if(toupper(answer) == questions[index].ans){
-            score++;
-            cout<<" Correct! "<<endl;
-
-        }
-        else{
-            chances--;
-            cout<<"Incorrect. Remaining Lives: "<<chances<<endl;
-        }
-
-
-
-
-      
-        
-        //
-        
-        
+        if (timeTaken > timeLimit) {
+    chances--;
+    cout << "Time's up! You took " << timeTaken << " seconds." << endl;
+    cout << "Remaining Lives: " << chances << endl;
+}
+else if (toupper(answer) == questions[index].ans) {
+    score++;
+    cout << "Correct!" << endl;
+}
+else {
+    chances--;
+    cout << "Incorrect. Remaining Lives: " << chances << endl;
+       
     }
     
     cout<<endl<<endl;
